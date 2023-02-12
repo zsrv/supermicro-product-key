@@ -5,24 +5,27 @@ import (
 	"runtime"
 )
 
-var buildVersion = "dev"
+var buildVersion = "1.0.0"
 var buildCommit string
-var buildDate string
+var buildDate = "unknown"
 var builtBy string
 
 // Version returns build information added during the build process.
 func Version() string {
 	result := buildVersion
 	if buildCommit != "" {
-		result = fmt.Sprintf("%s\ncommit: %s", result, buildCommit)
+		result = fmt.Sprintf("%s-%s", result, buildCommit)
 	}
+
+	result = fmt.Sprintf("%s %s/%s", result, runtime.GOOS, runtime.GOARCH)
+
 	if buildDate != "" {
-		result = fmt.Sprintf("%s\nbuild date: %s", result, buildDate)
+		result = fmt.Sprintf("%s BuildDate=%s", result, buildDate)
 	}
+
 	if builtBy != "" {
-		result = fmt.Sprintf("%s\nbuilt by: %s", result, builtBy)
+		result = fmt.Sprintf("%s BuiltBy=%s", result, builtBy)
 	}
-	result = fmt.Sprintf("%s\ngoos: %s\ngoarch: %s", result, runtime.GOOS, runtime.GOARCH)
 
 	return result
 }
