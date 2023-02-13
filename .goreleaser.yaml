@@ -4,12 +4,18 @@ before:
 
 builds:
   - ldflags:
-      - -s -w -X {{.ModulePath}}/pkg/build.buildVersion={{.Version}} -X {{.ModulePath}}/pkg/build.buildCommit={{.FullCommit}} -X {{.ModulePath}}/pkg/build.buildDate={{.Date}} -X {{.ModulePath}}/pkg/build.builtBy=goreleaser
+      - -s -w
+      - -X {{.ModulePath}}/pkg/build.buildVersion={{.Version}}
+      - -X {{.ModulePath}}/pkg/build.buildCommit={{.FullCommit}}
+      - -X {{.ModulePath}}/pkg/build.buildDate={{.Date}}
+      - -X {{.ModulePath}}/pkg/build.builtBy=goreleaser
     env:
       - CGO_ENABLED=0
     goos:
       - darwin
+      - freebsd
       - linux
+      - openbsd
       - windows
     goarch:
       - amd64
