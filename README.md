@@ -8,7 +8,7 @@ about reverse engineering the original SFT-OOB-LIC key format.
 ## Installation
 
 This utility is a command line program. If Go is installed on your system, the latest version of this utility
-can be compiled and installed by running:
+can be built and installed by running:
 
 ```shell
 go install github.com/zsrv/supermicro-product-key@latest
@@ -19,6 +19,11 @@ Otherwise, a binary can be downloaded from the [releases page](https://github.co
 ## Usage
 
 Execute the binary without any arguments to see usage instructions.
+Reading this entire README is recommended.
+
+Key activation instructions can be found at the
+[Supermicro website](https://store.supermicro.com/software/software-license-key-activation-usage)
+([PDF version](https://store.supermicro.com/media/wysiwyg/productspecs/Supermicro_Software_License_Key_Activation_User_Guide.pdf)).
 
 ## Examples
 
@@ -97,73 +102,57 @@ searching for mac address ...
 found match! mac = '3cecef123456'
 ```
 
-## Contributing
+## Product Key Formats and SKUs
 
-Much of the information here has been compiled from various documentation and may not have
-been personally verified. Please report any inaccuracies by opening an issue.
-
-New information would be greatly appreciated! Please open an issue or a discussion as appropriate.
-
-## Platform Support
-
-| Platform Generation | OOB Key | Non-JSON Key | JSON Key |
-|---------------------|:-------:|:------------:|:--------:|
-| 8 and earlier       |   NO    |      NO      |    NO    |
-| 9                   |   YES   |      NO      |    NO    |
-| 10                  |   YES   |     YES      |    NO    |
-| 11                  |   YES   |     YES      |    NO    |
-| 12 (select models)  |   YES   |     YES      |    NO    |
-| 12                  |   NO    |      NO      |   YES    |
-
-Select 12th generation platform motherboards accept non-JSON keys instead of JSON keys
-([source](https://store.supermicro.com/media/wysiwyg/productspecs/Supermicro_Software_License_Key_Activation_User_Guide.pdf)):
-- H12DSU-iN
-- H12DST-B
-- H12SST-PS
-- H12SSW-iN
-- H12SSW-iNL
-- H12SSW-NT
-- H12SSW-NTL
-
-## Product Key Formats
+This section describes each product key format, and each license SKU
+that is supported by each format.
 
 ### OOB
 
 A 24-character hex string split into groups of 4 characters, separated by dashes.
 
-### Non-JSON
-
-A 344-character base64-encoded string ("non-JSON key").
-
-### JSON
-
-A variable-length JSON string ("JSON key").
-
-The contents are digitally signed, and the signatures verified using a public key that is
-embedded in the BMC firmware.
-
-This key format is not currently supported by this utility.
-
-## License SKUs
-
-### OOB
+Keys in this format are created using the MAC address of the BMC that the key will be activated on
+as input.
 
 #### SFT-OOB-LIC
 
 Used by 11th generation and earlier platforms.
-The key is delivered in the JSON key format for 12th generation platforms.
+This key is delivered in the JSON key format for 12th generation platforms.
+
+Enables various out-of-band (OOB) management features.
 
 The functionality provided by this key is included in SFT-DCMS-SINGLE.
 
 ### Non-JSON
 
-#### SSM
+A 344-character base64-encoded string.
+
+Keys in this format are encrypted and decrypted using the MAC address of the BMC that the key
+will be activated on as input.
+
+Attributes encoded in the key:
+- Key format version byte (always 0)
+- Software ID (in the form of a numeric ID byte and a corresponding display name string that is usually
+  different from the license SKU)
+- Software version string (always "none" in samples from as far back as 2016; a sample from 2014 had
+  a null value instead)
+- Invoice number string (always "none" in samples from as far back as 2016; a sample from 2014 had 
+  a null value instead)
+- Creation date (stored as a Unix timestamp with second precision, converted to four bytes)
+- Expiration date (stored as a Unix timestamp with second precision, converted to four bytes;
+  a value of 0 is treated as "no expiration date")
+- Property (purpose unknown; no samples that have been found had a value set for this)
+- Secret data (calculated using several other attributes as input; keys are validated by the BMC by 
+  calculating this and comparing the result to the value stored in the key)
+- Checksum (computed using the other attributes as input)
+
+#### SSM (Unknown SKU)
 
 Available since at least 2015.
 
 Purpose unknown. Probably related to Supermicro Server Manager (SSM).
 
-#### SD5
+#### SD5 (Unknown SKU)
 
 Available since at least 2015.
 
@@ -197,7 +186,7 @@ This key was probably required to use SCM (Supermicro Command Manager).
 Node product key, available since at least 2013.
 
 This key generally allows the use of all server management utilities
-with a system.
+("Data Center Management Suite") with a system.
 
 #### SFT-DCMS-SITE
 
@@ -225,12 +214,51 @@ Service Calls (also known as Call Home) feature available in SSM and SUM.
 Node product key introduced in 2021.
 
 This key (in addition to SFT-DCMS-SINGLE) is required to manage the system
-with Supermicro SuperCloud Composer (SCC).
+with Supermicro SuperCloud Composer (SCC), a "composable cloud management
+platform that provides a unified dashboard to administer software-defined
+data centers" (hence "SDDC").
 
 This key is also required to use the Attestation command's Compare action
 that was introduced in SUM between 2020 and 2022.
+
+### JSON
+
+A variable-length JSON string.
+
+The contents are digitally signed, and the signatures verified using a public key that is
+embedded in the BMC firmware.
+
+This key format is not currently supported by this utility.
+
+## Platform Support
+
+| Platform Generation | OOB Key | Non-JSON Key | JSON Key |
+|---------------------|:-------:|:------------:|:--------:|
+| 8 and earlier       |   NO    |      NO      |    NO    |
+| 9                   |   YES   |      NO      |    NO    |
+| 10                  |   YES   |     YES      |    NO    |
+| 11                  |   YES   |     YES      |    NO    |
+| 12 (select models)  |   YES   |     YES      |    NO    |
+| 12                  |   NO    |      NO      |   YES    |
+
+Select 12th generation platform motherboards accept non-JSON keys instead of JSON keys
+([source](https://store.supermicro.com/media/wysiwyg/productspecs/Supermicro_Software_License_Key_Activation_User_Guide.pdf)):
+- H12DSU-iN
+- H12DST-B
+- H12SST-PS
+- H12SSW-iN
+- H12SSW-iNL
+- H12SSW-NT
+- H12SSW-NTL
 
 ## Glossary
 
 **Node Product Key**: A product key that is activated on a specific system. The key is bound to the MAC address of
 the BMC LAN port.
+
+## Contributing
+
+Much of the information here has been compiled from various documentation and may not have
+been personally verified. Please report any inaccuracies by opening an issue.
+
+New information would be greatly appreciated! Please open an issue or a discussion as appropriate.
