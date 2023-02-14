@@ -90,6 +90,10 @@ var nonjsonEncodeCmd = &cobra.Command{
 			pk.SoftwareIdentifier = *swid
 			swidSet = true
 		case len(swID) > 0:
+			if len(swID) != 1 {
+				return errors.New("software id must have a length of 1 byte")
+			}
+
 			swid, err := nonjson.SoftwareIdentifiers.ByID(swID[0])
 			if err != nil {
 				return err
