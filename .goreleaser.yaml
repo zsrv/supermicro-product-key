@@ -46,13 +46,13 @@ changelog:
   sort: asc
   groups:
     - title: Features and enhancements
-      regexp: '^Feat:.+$'
+      regexp: '^.*?Feat(\([[:word:]]+\))??!?:.+$'
       order: 0
     - title: Bug fixes
-      regexp: '^Bug:.+$'
+      regexp: '^.*?Bug(\([[:word:]]+\))??!?:.+$'
       order: 1
     - title: Documentation
-      regexp: '^Docs:.+$'
+      regexp: '^.*?Docs(\([[:word:]]+\))??!?:.+$'
       order: 2
     - title: Other
       order: 999
