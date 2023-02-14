@@ -44,10 +44,18 @@ snapshot:
 
 changelog:
   sort: asc
-  filters:
-    exclude:
-      - '^docs:'
-      - '^test:'
+  groups:
+    - title: Features and enhancements
+      regexp: '^Feat:.+$'
+      order: 0
+    - title: Bug fixes
+      regexp: '^Bug:.+$'
+      order: 1
+    - title: Documentation
+      regexp: '^Docs:.+$'
+      order: 2
+    - title: Other
+      order: 999
 
 # yaml-language-server: $schema=https://goreleaser.com/static/schema.json
 # vim: set ts=2 sw=2 tw=0 fo=cnqoj
