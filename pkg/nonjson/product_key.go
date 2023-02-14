@@ -6,6 +6,7 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"github.com/zsrv/supermicro-product-key/pkg/oob"
 	"strconv"
 	"time"
 )
@@ -77,6 +78,11 @@ type ProductKey struct {
 // Encode returns the encrypted, base64-encoded ProductKey associated with
 // the given BMC MAC address.
 func (pk *ProductKey) Encode(macAddress string) (string, error) {
+	macAddress, err := oob.NormalizeMACAddress(macAddress)
+	if err != nil {
+		return "", err
+	}
+
 	buffer := bytes.NewBuffer(make([]byte, 0, 255))
 	writer := bufio.NewWriterSize(buffer, 255)
 
@@ -85,7 +91,7 @@ func (pk *ProductKey) Encode(macAddress string) (string, error) {
 
 	// Unencrypted block
 
-	err := writer.WriteByte(pk.FormatVersion)
+	err = writer.WriteByte(pk.FormatVersion)
 	if err != nil {
 		return "", err
 	}
