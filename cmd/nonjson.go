@@ -73,6 +73,7 @@ var nonjsonEncodeCmd = &cobra.Command{
 
 		pk := nonjson.NewProductKey()
 
+		var swidSet bool
 		switch {
 		case swSKU != "":
 			swid, err := nonjson.SoftwareIdentifiers.BySKU(swSKU)
@@ -80,18 +81,24 @@ var nonjsonEncodeCmd = &cobra.Command{
 				return err
 			}
 			pk.SoftwareIdentifier = *swid
+			swidSet = true
 		case swDisplayName != "":
 			swid, err := nonjson.SoftwareIdentifiers.ByDisplayName(swDisplayName)
 			if err != nil {
 				return err
 			}
 			pk.SoftwareIdentifier = *swid
+			swidSet = true
 		case len(swID) > 0:
 			swid, err := nonjson.SoftwareIdentifiers.ByID(swID[0])
 			if err != nil {
 				return err
 			}
 			pk.SoftwareIdentifier = *swid
+			swidSet = true
+		}
+		if swidSet != true {
+			return errors.New("one of sku, display-name, id are required")
 		}
 
 		if softwareVersion != "" {
