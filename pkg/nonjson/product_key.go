@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"bytes"
 	"encoding/base64"
-	"errors"
 	"fmt"
 	"github.com/zsrv/supermicro-product-key/pkg/oob"
 	"strconv"
@@ -24,24 +23,6 @@ func NewProductKey() *ProductKey {
 		SecretData:         nil,
 		Checksum:           0,
 	}
-}
-
-// NewProductKeyForSKU returns a new ProductKey for the given license SKU,
-// or an error if the SKU could not be matched to a software identifier.
-func NewProductKeyForSKU(sku string) (*ProductKey, error) {
-	if sku == "" {
-		return nil, errors.New("sku must not be empty")
-	}
-
-	pk := NewProductKey()
-
-	softwareIdentifier, err := SoftwareIdentifiers.BySKU(sku)
-	if err != nil {
-		return nil, err
-	}
-	pk.SoftwareIdentifier = *softwareIdentifier
-
-	return pk, nil
 }
 
 type ProductKey struct {
