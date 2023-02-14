@@ -28,16 +28,16 @@ func init() {
 	nonjsonCmd.AddCommand(nonjsonBruteForceCmd)
 	nonjsonCmd.AddCommand(nonjsonListSKUCmd)
 
-	nonjsonEncodeCmd.Flags().StringVar(&swSKU, "sku", "", "License SKU")
-	nonjsonEncodeCmd.Flags().StringVar(&swDisplayName, "display-name", "", "Product key software display name")
-	nonjsonEncodeCmd.Flags().BytesHexVar(&swID, "id", []byte{}, "Product key software ID (in hex, e.g. '02'")
+	nonjsonEncodeCmd.Flags().StringVar(&swSKU, "sku", "", "license SKU (one of sku, display-name, id are required)")
+	nonjsonEncodeCmd.Flags().StringVar(&swDisplayName, "display-name", "", "software display name (one of sku, display-name, id are required)")
+	nonjsonEncodeCmd.Flags().BytesHexVar(&swID, "id", []byte{}, "software ID in hex, e.g. '02' (one of sku, display-name, id are required)")
 	nonjsonEncodeCmd.MarkFlagsMutuallyExclusive("sku", "display-name", "id")
 
-	nonjsonEncodeCmd.Flags().StringVar(&softwareVersion, "software-version", "", "Set the software version")
-	nonjsonEncodeCmd.Flags().StringVar(&invoiceNumber, "invoice-number", "", "Set the invoice number")
-	nonjsonEncodeCmd.Flags().StringVar(&creationDate, "creation-date", "", "Set the creation date (in RFC3339 format, e.g. '2000-01-01T00:00:00Z')")
-	nonjsonEncodeCmd.Flags().StringVar(&expirationDate, "expiration-date", "", "Set the expiration date (in RFC3339 format, e.g. '2000-01-01T00:00:00Z')")
-	nonjsonEncodeCmd.Flags().BytesHexVar(&property, "property", []byte{}, "Set the property value (in hex, e.g. '01EE02FF')")
+	nonjsonEncodeCmd.Flags().StringVar(&softwareVersion, "software-version", "", "software version (default 'none')")
+	nonjsonEncodeCmd.Flags().StringVar(&invoiceNumber, "invoice-number", "", "invoice number (default 'none')")
+	nonjsonEncodeCmd.Flags().StringVar(&creationDate, "creation-date", "", "creation date in RFC3339 format, e.g. '1970-01-01T00:00:00Z' (default is the current date and time)")
+	nonjsonEncodeCmd.Flags().StringVar(&expirationDate, "expiration-date", "", "expiration date in RFC3339 format (default '1970-01-01T00:00:00Z' - no expiration)")
+	nonjsonEncodeCmd.Flags().BytesHexVar(&property, "property", []byte{}, "property in hex, e.g. '01EE02FF' (default null)")
 }
 
 var nonjsonCmd = &cobra.Command{
@@ -67,7 +67,6 @@ var nonjsonDecodeCmd = &cobra.Command{
 var nonjsonEncodeCmd = &cobra.Command{
 	Use:   "encode {--sku sku | --display-name name | --id id} [--software-version version] [--invoice-number invoice] [--creation-date date] [--expiration-date date] [--property property] MAC_ADDRESS",
 	Short: "Encode a non-JSON product key",
-	Long:  "Encode a non-JSON product key. Any attributes not specified will be set to default values.",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		macAddress := args[0]
