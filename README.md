@@ -173,6 +173,33 @@ This key is required to use Supermicro Power Manager (SPM).
 
 The functionality provided by this key is also included in SFT-DCMS-SINGLE.
 
+##### Samples
+
+```
+Source: SPM User Guide (PDF included in SPM download)
+
+MAC Address: 002590fe7a43
+
+Key: AAQAAAAAAAAAAAAAAAAAAGgGV+3RQ/KGDk0jKe/2bnjvnc89ke8Y/Bd1gCtXKH4CjacoAEmPEzff1e5igzxl2RIQns2IlSNCEHk8hi6zEdLRefQgBVGMoyRwHywF/Qid4ugrbX7Q+xE+I4ly0/Hu7QilyJusitzD5SXl6RzkHhCTbrFMOrWP0J9TxeRjpMZGPe2+TVPhuP2Bs2pPMnL5wYFwsoiOCr3fUu9ef7c7DQ13v/00cOAukoP1zxxtbFbwDgMG8ZuMqmTH2d7PCz5g7DXdncu9LyVWxG69jwPiOHXhJVJUfmaw5AhV6FDlXGF+8p/kMvNkzsMddcv+IXfb4Q==
+
+Decoded:
+{
+        "FormatVersion": 0,
+        "SoftwareIdentifier": {
+                "SKU": "SFT-SPM-LIC",
+                "DisplayName": "SPM",
+                "ID": 4
+        },
+        "SoftwareVersion": "",
+        "InvoiceNumber": "",
+        "CreationDate": "2014-09-26T08:45:11Z",
+        "ExpirationDate": "1970-01-01T00:00:00Z",
+        "Property": null,
+        "SecretData": null,
+        "Checksum": 47
+}
+```
+
 #### SFT-SCM-LIC
 
 Node product key, first seen in a Supermicro Server Management Utilities
@@ -187,6 +214,33 @@ Node product key, available since at least 2013.
 
 This key generally allows the use of all server management utilities
 ("Data Center Management Suite") with a system.
+
+##### Samples
+
+```
+Source: https://store.supermicro.com/media/wysiwyg/productspecs/Supermicro_Software_License_Key_Activation_User_Guide.pdf
+
+MAC Address: 0cc47a87aeaa
+
+Key: AAYAAAAAAAAAAAAAAAAAAGSw1zjcokBJrE1va2uIhi1umjMFAUZVqBuP06oZmZkT4y1pOvSYXDuMbJ8S27SyrA8A3S7XgblZeEYbrUF+JzAg6SSAgN6TxAwc8QZS5rIqi7oDARAjJkxMJJKHwYcHiCW1/pSeclAMquDl/g0mTWNxYeG01mGsrtclIKIm3tvN8i6/zpEeV6jfE7AUOAAunFOVWt/OMcD+iTiY7pN3HhQ39cS3t7dBYoWv/a1sPjtlCelA0iLjoXi8TCbqVCxpVv4QQRI7Qv2wH4hNcl5dwndiMkamCYDwU4P7DlN/v+++bAgQ1N0hE/zwLqnxchD+iw==
+
+Decoded:
+{
+        "FormatVersion": 0,
+        "SoftwareIdentifier": {
+                "SKU": "SFT-DCMS-SINGLE",
+                "DisplayName": "ALL",
+                "ID": 6
+        },
+        "SoftwareVersion": "none",
+        "InvoiceNumber": "none",
+        "CreationDate": "2021-12-22T05:55:53Z",
+        "ExpirationDate": "1970-01-01T00:00:00Z",
+        "Property": null,
+        "SecretData": "OWJmNjNmYjg2OGYzNDkwMzY2ODRmYjE1NDdmMWJjN2I=",
+        "Checksum": 213
+}
+```
 
 #### SFT-DCMS-SITE
 
@@ -208,6 +262,33 @@ Node product key introduced in 2017.
 
 This key (in addition to SFT-DCMS-SINGLE) is required to use the
 Service Calls (also known as Call Home) feature available in SSM and SUM.
+
+##### Samples
+
+```
+Source: SSM User Guide (PDF included in SSM download)
+
+MAC Address: 0cc47ad57d8d
+
+Key: AAkAAAAAAAAAAAAAAAAAAMjnO7OIeNNWpc63TFto8dp6A5UrXzkBpQdkhtnMrUR/oTFKIdhLPpIi6b32lQJFaoPly7uj2OztgzUxjKy1kdMDrEEFra1KlLDrBoZC88fAWfuVXmnVBhjR7tNKSa4r29owr8M3ETun+GxqerDT8kDa+jafMEkETjDJ2Gln6sk7oRCLA7xVZhG1RfkyjcrO+qyYL4OOHH8GG8CUTDx/dlBCXH8i3TL3g5d7X8U/B2XO/z85JUWOeVgwEzUXxK0eN5l3ub/OGYXVzMAH0fiq0LU6srDV+Qvc82gwckcrUKGpi0c6DUXl/qWUWDsWFrG48w==
+
+Decoded:
+{
+        "FormatVersion": 0,
+        "SoftwareIdentifier": {
+                "SKU": "SFT-DCMS-SVC-KEY",
+                "DisplayName": "SFT-DCMS-SVC-KEY",
+                "ID": 9
+        },
+        "SoftwareVersion": "none",
+        "InvoiceNumber": "none",
+        "CreationDate": "2018-12-18T10:09:55Z",
+        "ExpirationDate": "2019-04-17T09:09:55Z",
+        "Property": null,
+        "SecretData": "MTY3YmIyMTg2NGIyOTMxYzkxNGUwY2FkMmY3ZDE1MWE=",
+        "Checksum": 147
+}
+```
 
 #### SFT-SDDC-SINGLE
 
