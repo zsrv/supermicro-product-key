@@ -25,7 +25,10 @@ Key activation instructions can be found at the
 [Supermicro website](https://store.supermicro.com/software/software-license-key-activation-usage)
 ([PDF version](https://store.supermicro.com/media/wysiwyg/productspecs/Supermicro_Software_License_Key_Activation_User_Guide.pdf)).
 
-## Examples
+## Quick Start
+
+All key types are bound to the MAC address of the BMC LAN port. Replace `3cecef123456` in the following examples
+with the BMC MAC address of the system you plan to activate the key on.
 
 ### OOB Keys
 
@@ -65,8 +68,16 @@ SFT-DCMS-SVC-KEY    SFT-DCMS-SVC-KEY  9
 SFT-SDDC-SINGLE     SFT-SDDC-SINGLE   210
 ```
 
-Encode a SFT-DCMS-SINGLE key with all attributes specified (attributes that are omitted
-will be left at their default values):
+Encode a key with no expiration date, and safe default values for the remaining attributes (recommended).
+Replace SFT-DCMS-SINGLE with any other SKU from the list above to encode a different key type:
+
+```
+$ ./supermicro-product-key nonjson encode --sku SFT-DCMS-SINGLE 3cecef123456
+AAYAAAAAAAAAAAAAAAAAAExLCU/N0RxxvG7ZACnE9iz3GCd/is0BF+s/dgeUoIyPgnp3qBgf5iyrcpByGPE9xgkT38mRmt2/R+3S/iXb/8ram5O/cXUJxvkmqZi0ODYUbze7+NLgSZ/YPPM77OBGXTgiLGYq4pihruPxfYLkT64U1vfZQLCJWBwoinbMbdxTlBC9we54hWXSF5vcY9MGNiJsZ+d3vKdoSMgCqSqHNCRLRYlYVjrT4CYmtw2k6qcBvM3Zq0pLwjznsP3tD7CxHKIf5DoIph6zj9M3VTtiPm2yzgJOSJwNGhFJq4bvErw2PqqGURub+lNz5AazeafiRw==
+```
+
+For **experimentation purposes**: Encode a key with all attributes specified
+(attributes that are omitted will be left at their default values):
 
 ```
 $ ./supermicro-product-key nonjson encode --sku SFT-DCMS-SINGLE --software-version ABC123 --invoice-number 0123456789 --creation-date 2020-12-30T12:00:00Z --expiration-date 1970-01-01T00:00:00Z --property 01AA02FF 3cecef123456
@@ -141,7 +152,9 @@ Attributes encoded in the key:
 - Creation date (stored as a Unix timestamp with second precision, converted to four bytes)
 - Expiration date (stored as a Unix timestamp with second precision, converted to four bytes;
   a value of 0 is treated as "no expiration date")
-- Property (purpose unknown; no samples that have been found had a value set for this)
+- Property (purpose unknown; no samples that have been found had a value set for this). **Warning**: Keys with a
+  non-null value set for this attribute can be activated on a system but have been shown to be invalid. Only set
+  this attribute for experimentation purposes, with a method to remove the key from the system readily available.
 - Secret data (calculated using several other attributes as input; keys are validated by the BMC by 
   calculating this and comparing the result to the value stored in the key)
 - Checksum (computed using the other attributes as input)
@@ -206,7 +219,7 @@ Node product key, first seen in a Supermicro Server Management Utilities
 brochure dated July 2013. The key was missing from the same brochure dated
 April 2015.
 
-This key was probably required to use SCM (Supermicro Command Manager).
+This key was probably required to use Supermicro Command Manager (SCM).
 
 #### SFT-DCMS-SINGLE
 
