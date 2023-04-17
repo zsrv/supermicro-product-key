@@ -113,6 +113,36 @@ searching for mac address ...
 found match! mac = '3cecef123456'
 ```
 
+### JSON Keys
+
+Verify the signature of a product key:
+
+```
+$ ./supermicro-product-key json verify ac1f6b3ddaec '{"ProductKey":{"Node":{"LicenseID":"1","LicenseName":"SFT-OOB-LIC","CreateDate":"20200921"},"Signature":"OAaLKLy5IEK9WnIdnyA9ew89qTKQrm1eu+Q84CbwjR7XG7JGYccec+3vS3y/kQRRej3DcNVQPWsasX86ROTT+LZFsNY2mIEbQ6+Y/Tmv6+jwYgbQjEN6CjI7ahyKcebN12+3cLvPZyRf3kDqgtcpfuw3Qeg8BbhhyHQk29yNp+NG0XbKn02sHTrskvAGgG0GGlDCT5YmNa0gDSMzsvt/eH9nskb5opQNE3j7MAMXbjpI7xVHRbmB2N5iSu8gQUj0/pmk615ztM/uB54ur3GninJRU74S9Kotz+JunJg4pprGyQW544ggmzklmtr3zCA3GK/d929eZsVk5p8UxXG7wQ=="}}'
+signature verified ok
+```
+
+Find the MAC address associated with a key (this can take a long time for JSON keys - up to one hour):
+
+```
+$ ./supermicro-product-key json bruteforce '{"ProductKey":{"Node":{"LicenseID":"1","LicenseName":"SFT-OOB-LIC","CreateDate":"20200921"},"Signature":"OAaLKLy5IEK9WnIdnyA9ew89qTKQrm1eu+Q84CbwjR7XG7JGYccec+3vS3y/kQRRej3DcNVQPWsasX86ROTT+LZFsNY2mIEbQ6+Y/Tmv6+jwYgbQjEN6CjI7ahyKcebN12+3cLvPZyRf3kDqgtcpfuw3Qeg8BbhhyHQk29yNp+NG0XbKn02sHTrskvAGgG0GGlDCT5YmNa0gDSMzsvt/eH9nskb5opQNE3j7MAMXbjpI7xVHRbmB2N5iSu8gQUj0/pmk615ztM/uB54ur3GninJRU74S9Kotz+JunJg4pprGyQW544ggmzklmtr3zCA3GK/d929eZsVk5p8UxXG7wQ=="}}'
+searching for mac address ...
+found match! mac = 'ac1f6b3ddaec'
+```
+
+List all key types that are available:
+
+```
+$ ./supermicro-product-key json listswid 
+License SKU       ID
+-----------       --
+SFT-OOB-LIC       1
+SFT-DCMS-SINGLE   2
+SFT-SPM-LIC       3
+SFT-DCMS-SVC-KEY  4
+SFT-SDDC-SINGLE   5
+```
+
 ## Product Key Formats and SKUs
 
 This section describes each product key format, and each license SKU
@@ -322,7 +352,31 @@ A variable-length JSON string.
 The contents are digitally signed, and the signatures verified using a public key that is
 embedded in the BMC firmware.
 
-This key format is not currently supported by this utility.
+This key format can only be verified by this utility, not generated.
+
+#### SFT-OOB-LIC
+
+##### Samples
+
+```
+Source: https://store.supermicro.com/software/dcms-key-activation-guide
+
+MAC Address: ac1f6b3ddaec (different from what is displayed in the guide!)
+
+Key: {"ProductKey":{"Node":{"LicenseID":"1","LicenseName":"SFT-OOB-LIC","CreateDate":"20200921"},"Signature":"OAaLKLy5IEK9WnIdnyA9ew89qTKQrm1eu+Q84CbwjR7XG7JGYccec+3vS3y/kQRRej3DcNVQPWsasX86ROTT+LZFsNY2mIEbQ6+Y/Tmv6+jwYgbQjEN6CjI7ahyKcebN12+3cLvPZyRf3kDqgtcpfuw3Qeg8BbhhyHQk29yNp+NG0XbKn02sHTrskvAGgG0GGlDCT5YmNa0gDSMzsvt/eH9nskb5opQNE3j7MAMXbjpI7xVHRbmB2N5iSu8gQUj0/pmk615ztM/uB54ur3GninJRU74S9Kotz+JunJg4pprGyQW544ggmzklmtr3zCA3GK/d929eZsVk5p8UxXG7wQ=="}}
+```
+
+#### SFT-DCMS-SINGLE
+
+##### Samples
+
+```
+Source: https://github.com/supermicro/redfish/blob/ea5ea99eda0b7ac50d48ca7faa307dfcd3f41e05/Postman_Collections/05_managers.postman_collection.json#L1348
+
+MAC Address: 3cecef72fc46
+
+Key: {"ProductKey":{"Node":{"LicenseID":"2","LicenseName":"SFT-DCMS-SINGLE","CreateDate":"20220614"},"Signature":"ZKFCkgKEYh9+8MNZW7RfPlt/nRxQJGJ0kLHLkalLt1tpgs4MTLHrXvp/eZzfhSPUb5qMNu9RkFn9MaukK6vNXlOIG7ijbR+vjkxVcdIIkMnhzHFLxE/0ws74/lJyGLkSO1jHRQRaczSDuHgzSgsWivjHejB/tRlSpnAEM7FplgyuBSbisek8pEgSKua5jCf7Zn4sjYXXO7T9rTV4aFq090XgRbEay45eBSGpun9pcyGs8UIeNH93qzqCmlkcjj+bFSNcm3VeucEjScE3fzqG93NMEQQWYEdsYcuJb4a+kWP/ffFvyVRWvqSWvPgD5N+eNqKAmmC4MmjykRy3DWw4fA=="}}
+```
 
 ## Platform Support
 
