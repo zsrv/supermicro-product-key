@@ -16,6 +16,11 @@ var rootCmd = &cobra.Command{
 	Use:     "supermicro-product-key",
 	Short:   "Supermicro Product Key Utility",
 	Version: build.Version(),
+	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		// Stops usage from printing for errors in RunE, while still allowing
+		// usage to print for cobra errors (e.g. Args count mismatch)
+		cmd.SilenceUsage = true
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
