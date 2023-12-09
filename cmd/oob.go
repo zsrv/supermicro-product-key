@@ -2,7 +2,9 @@ package cmd
 
 import (
 	"fmt"
+
 	"github.com/spf13/cobra"
+	netinternal "github.com/zsrv/supermicro-product-key/pkg/net"
 	"github.com/zsrv/supermicro-product-key/pkg/oob"
 )
 
@@ -22,7 +24,10 @@ var oobEncodeCmd = &cobra.Command{
 	Short: "Encode an OOB product key",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		macAddress := args[0]
+		macAddress, err := netinternal.ParseMAC(args[0])
+		if err != nil {
+			return err
+		}
 
 		productKey, err := oob.EncodeOOBProductKey(macAddress)
 		if err != nil {
@@ -43,7 +48,7 @@ var oobBruteForceCmd = &cobra.Command{
 
 		fmt.Println("searching for mac address ...")
 
-		mac, err := oob.BruteForceProductKeyMACAddress(productKey)
+		mac, err := oob.BruteForceMACAddress(productKey)
 		if err != nil {
 			return err
 		}

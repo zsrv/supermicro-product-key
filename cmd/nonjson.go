@@ -3,12 +3,14 @@ package cmd
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/pkg/errors"
-	"github.com/spf13/cobra"
-	"github.com/zsrv/supermicro-product-key/pkg/nonjson"
 	"os"
 	"text/tabwriter"
 	"time"
+
+	"github.com/pkg/errors"
+	"github.com/spf13/cobra"
+	netinternal "github.com/zsrv/supermicro-product-key/pkg/net"
+	"github.com/zsrv/supermicro-product-key/pkg/nonjson"
 )
 
 var swSKU string
@@ -50,10 +52,13 @@ var nonjsonDecodeCmd = &cobra.Command{
 	Short: "Decode a non-JSON product key",
 	Args:  cobra.ExactArgs(2),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		macAddress := args[0]
+		macAddress, err := netinternal.ParseMAC(args[0])
+		if err != nil {
+			return err
+		}
 		encodedProductKey := args[1]
 
-		productKey, err := nonjson.DecodeProductKey(encodedProductKey, macAddress)
+		productKey, err := nonjson.ParseEncodedProductKey(encodedProductKey, macAddress)
 		if err != nil {
 			return errors.WithMessage(err, "failed to decode product key")
 		}
@@ -69,9 +74,12 @@ var nonjsonEncodeCmd = &cobra.Command{
 	Short: "Encode a non-JSON product key",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		macAddress := args[0]
+		macAddress, err := netinternal.ParseMAC(args[0])
+		if err != nil {
+			return err
+		}
 
-		pk := nonjson.NewProductKey()
+		pk := nonjson.NewDefaultProductKey()
 
 		var swidSet bool
 		switch {
@@ -152,7 +160,7 @@ var nonjsonBruteForceCmd = &cobra.Command{
 
 		fmt.Println("searching for mac address ...")
 
-		mac, err := nonjson.BruteForceProductKeyMACAddress(productKey)
+		mac, err := nonjson.BruteForceMACAddress(productKey)
 		if err != nil {
 			return err
 		}

@@ -3,6 +3,8 @@ package nonjson
 import (
 	"testing"
 	"time"
+
+	netinternal "github.com/zsrv/supermicro-product-key/pkg/net"
 )
 
 func TestProductKey_Encode(t *testing.T) {
@@ -18,7 +20,7 @@ func TestProductKey_Encode(t *testing.T) {
 		Checksum           byte
 	}
 	type args struct {
-		macAddress string
+		macAddress netinternal.HardwareAddr
 	}
 
 	validProductKey := fields{
@@ -44,26 +46,10 @@ func TestProductKey_Encode(t *testing.T) {
 			name:   "valid",
 			fields: validProductKey,
 			args: args{
-				macAddress: "3cecef123456",
+				macAddress: validEncodedProductKeyMACAddress,
 			},
-			want:    "AAYAAAAAAAAAAAAAAAAAAExLCU/N0RxxvG7ZACnE9iyfm1zRK6acy5rtKA01mFtnuCkFSJQtmsmoAN7KVyfxVbUpwPvJNKc2tkQbezXSbITnPSKnp8i9uG+C8DB+9oISsuTL8L0v07TOOsAnrSq4fR4mAhwANTYsmoLYmpqhVDLH/VVisfqVFSZu72vTDf2rjYESalQNawzIH8qjEhS2dzDUTm4RWf122JiPTSccbg2V8b4XXLRSefvc4ctVmCVvmrWRX+Aosgn9z0VS5V1ABhitiDjBd4NK34wOoGtn0vTwdiAfjMH95U5Q+c4hCjWsUnTrlUrdH5OQgtCDGi7Nag==",
+			want:    validEncodedProductKey,
 			wantErr: false,
-		},
-		{
-			name:   "mac address with invalid character",
-			fields: validProductKey,
-			args: args{
-				macAddress: "3cecef12345x",
-			},
-			wantErr: true,
-		},
-		{
-			name:   "mac address too long",
-			fields: validProductKey,
-			args: args{
-				macAddress: "3cecef1234567",
-			},
-			wantErr: true,
 		},
 	}
 	for _, tt := range tests {

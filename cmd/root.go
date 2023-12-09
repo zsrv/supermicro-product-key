@@ -1,12 +1,13 @@
 package cmd
 
 import (
+	"os"
+	"time"
+
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/zsrv/supermicro-product-key/pkg/build"
-	"os"
-	"time"
 )
 
 var logVerbosity int

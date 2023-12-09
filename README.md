@@ -44,7 +44,7 @@ Find the MAC address associated with a key:
 ```
 $ ./supermicro-product-key oob bruteforce CE27-F641-9B04-6B24-5D04-5D32
 searching for mac address ...
-found match! mac = '3cecef123456'
+found match! mac = '3CECEF123456'
 ```
 
 ### Non-JSON Keys
@@ -110,7 +110,7 @@ Find the MAC address associated with a key:
 ```
 $ ./supermicro-product-key nonjson bruteforce AAYAAAAAAAAAAAAAAAAAAJOVA97uSfqDCtInPd8H2g4rUdY5PtJ3op7hUYaFWOn2aWeT/f+4ZaMdelxJgFG3NjRPqXIMfJ2mFdeR8tZYfNusG3i6SP7cDBsN5Kbu/Bfj3q6WWlUKavF9j6oulmnvS83CZkzEdjQrOfq7bokHV6HnAUn/83UGKn+b5Db4E7fcGjmHYOCzP9rTTZnmtfUHShcEN48+Aka9ACcyfUDo9kdiJQpFRzTQz0ay5gGii6MB0Yw+G1JECp804aNGzCzl5PsP122dZ0cTFFN7THfy07Se1NDd+GCCoH2AN7UFa8tTKquZBgdwBgU/EOPX31YXJQ==
 searching for mac address ...
-found match! mac = '3cecef123456'
+found match! mac = '3CECEF123456'
 ```
 
 ### JSON Keys
@@ -122,18 +122,18 @@ $ ./supermicro-product-key json verify ac1f6b3ddaec '{"ProductKey":{"Node":{"Lic
 signature verified ok
 ```
 
-Find the MAC address associated with a key (this can take a long time for JSON keys - up to one hour):
+Find the MAC address associated with a key:
 
 ```
 $ ./supermicro-product-key json bruteforce '{"ProductKey":{"Node":{"LicenseID":"1","LicenseName":"SFT-OOB-LIC","CreateDate":"20200921"},"Signature":"OAaLKLy5IEK9WnIdnyA9ew89qTKQrm1eu+Q84CbwjR7XG7JGYccec+3vS3y/kQRRej3DcNVQPWsasX86ROTT+LZFsNY2mIEbQ6+Y/Tmv6+jwYgbQjEN6CjI7ahyKcebN12+3cLvPZyRf3kDqgtcpfuw3Qeg8BbhhyHQk29yNp+NG0XbKn02sHTrskvAGgG0GGlDCT5YmNa0gDSMzsvt/eH9nskb5opQNE3j7MAMXbjpI7xVHRbmB2N5iSu8gQUj0/pmk615ztM/uB54ur3GninJRU74S9Kotz+JunJg4pprGyQW544ggmzklmtr3zCA3GK/d929eZsVk5p8UxXG7wQ=="}}'
 searching for mac address ...
-found match! mac = 'ac1f6b3ddaec'
+found match! mac = 'AC1F6B3DDAEC'
 ```
 
 List all key types that are available:
 
 ```
-$ ./supermicro-product-key json listswid 
+$ ./supermicro-product-key json listswid
 License SKU       ID
 -----------       --
 SFT-OOB-LIC       1
@@ -221,7 +221,7 @@ The functionality provided by this key is also included in SFT-DCMS-SINGLE.
 ```
 Source: SPM User Guide (PDF included in SPM download)
 
-MAC Address: 002590fe7a43
+MAC Address: 002590FE7A43
 
 Key: AAQAAAAAAAAAAAAAAAAAAGgGV+3RQ/KGDk0jKe/2bnjvnc89ke8Y/Bd1gCtXKH4CjacoAEmPEzff1e5igzxl2RIQns2IlSNCEHk8hi6zEdLRefQgBVGMoyRwHywF/Qid4ugrbX7Q+xE+I4ly0/Hu7QilyJusitzD5SXl6RzkHhCTbrFMOrWP0J9TxeRjpMZGPe2+TVPhuP2Bs2pPMnL5wYFwsoiOCr3fUu9ef7c7DQ13v/00cOAukoP1zxxtbFbwDgMG8ZuMqmTH2d7PCz5g7DXdncu9LyVWxG69jwPiOHXhJVJUfmaw5AhV6FDlXGF+8p/kMvNkzsMddcv+IXfb4Q==
 
@@ -263,7 +263,7 @@ This key generally allows the use of all server management utilities
 ```
 Source: https://store.supermicro.com/media/wysiwyg/productspecs/Supermicro_Software_License_Key_Activation_User_Guide.pdf
 
-MAC Address: 0cc47a87aeaa
+MAC Address: 0CC47A87AEAA
 
 Key: AAYAAAAAAAAAAAAAAAAAAGSw1zjcokBJrE1va2uIhi1umjMFAUZVqBuP06oZmZkT4y1pOvSYXDuMbJ8S27SyrA8A3S7XgblZeEYbrUF+JzAg6SSAgN6TxAwc8QZS5rIqi7oDARAjJkxMJJKHwYcHiCW1/pSeclAMquDl/g0mTWNxYeG01mGsrtclIKIm3tvN8i6/zpEeV6jfE7AUOAAunFOVWt/OMcD+iTiY7pN3HhQ39cS3t7dBYoWv/a1sPjtlCelA0iLjoXi8TCbqVCxpVv4QQRI7Qv2wH4hNcl5dwndiMkamCYDwU4P7DlN/v+++bAgQ1N0hE/zwLqnxchD+iw==
 
@@ -311,7 +311,7 @@ Service Calls (also known as Call Home) feature available in SSM and SUM.
 ```
 Source: SSM User Guide (PDF included in SSM download)
 
-MAC Address: 0cc47ad57d8d
+MAC Address: 0CC47AD57D8D
 
 Key: AAkAAAAAAAAAAAAAAAAAAMjnO7OIeNNWpc63TFto8dp6A5UrXzkBpQdkhtnMrUR/oTFKIdhLPpIi6b32lQJFaoPly7uj2OztgzUxjKy1kdMDrEEFra1KlLDrBoZC88fAWfuVXmnVBhjR7tNKSa4r29owr8M3ETun+GxqerDT8kDa+jafMEkETjDJ2Gln6sk7oRCLA7xVZhG1RfkyjcrO+qyYL4OOHH8GG8CUTDx/dlBCXH8i3TL3g5d7X8U/B2XO/z85JUWOeVgwEzUXxK0eN5l3ub/OGYXVzMAH0fiq0LU6srDV+Qvc82gwckcrUKGpi0c6DUXl/qWUWDsWFrG48w==
 
@@ -361,7 +361,7 @@ This key format can only be verified by this utility, not generated.
 ```
 Source: https://store.supermicro.com/software/dcms-key-activation-guide
 
-MAC Address: ac1f6b3ddaec (different from what is displayed in the guide!)
+MAC Address: AC1F6B3DDAEC (different from what is displayed in the guide!)
 
 Key: {"ProductKey":{"Node":{"LicenseID":"1","LicenseName":"SFT-OOB-LIC","CreateDate":"20200921"},"Signature":"OAaLKLy5IEK9WnIdnyA9ew89qTKQrm1eu+Q84CbwjR7XG7JGYccec+3vS3y/kQRRej3DcNVQPWsasX86ROTT+LZFsNY2mIEbQ6+Y/Tmv6+jwYgbQjEN6CjI7ahyKcebN12+3cLvPZyRf3kDqgtcpfuw3Qeg8BbhhyHQk29yNp+NG0XbKn02sHTrskvAGgG0GGlDCT5YmNa0gDSMzsvt/eH9nskb5opQNE3j7MAMXbjpI7xVHRbmB2N5iSu8gQUj0/pmk615ztM/uB54ur3GninJRU74S9Kotz+JunJg4pprGyQW544ggmzklmtr3zCA3GK/d929eZsVk5p8UxXG7wQ=="}}
 ```
@@ -373,7 +373,7 @@ Key: {"ProductKey":{"Node":{"LicenseID":"1","LicenseName":"SFT-OOB-LIC","CreateD
 ```
 Source: https://github.com/supermicro/redfish/blob/ea5ea99eda0b7ac50d48ca7faa307dfcd3f41e05/Postman_Collections/05_managers.postman_collection.json#L1348
 
-MAC Address: 3cecef72fc46
+MAC Address: 3CECEF72FC46
 
 Key: {"ProductKey":{"Node":{"LicenseID":"2","LicenseName":"SFT-DCMS-SINGLE","CreateDate":"20220614"},"Signature":"ZKFCkgKEYh9+8MNZW7RfPlt/nRxQJGJ0kLHLkalLt1tpgs4MTLHrXvp/eZzfhSPUb5qMNu9RkFn9MaukK6vNXlOIG7ijbR+vjkxVcdIIkMnhzHFLxE/0ws74/lJyGLkSO1jHRQRaczSDuHgzSgsWivjHejB/tRlSpnAEM7FplgyuBSbisek8pEgSKua5jCf7Zn4sjYXXO7T9rTV4aFq090XgRbEay45eBSGpun9pcyGs8UIeNH93qzqCmlkcjj+bFSNcm3VeucEjScE3fzqG93NMEQQWYEdsYcuJb4a+kWP/ffFvyVRWvqSWvPgD5N+eNqKAmmC4MmjykRy3DWw4fA=="}}
 ```

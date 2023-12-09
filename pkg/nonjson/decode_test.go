@@ -4,12 +4,14 @@ import (
 	"reflect"
 	"testing"
 	"time"
+
+	netinternal "github.com/zsrv/supermicro-product-key/pkg/net"
 )
 
 func TestDecodeProductKey(t *testing.T) {
 	type args struct {
 		encodedProductKey string
-		macAddress        string
+		macAddress        netinternal.HardwareAddr
 	}
 	tests := []struct {
 		name    string
@@ -20,8 +22,8 @@ func TestDecodeProductKey(t *testing.T) {
 		{
 			name: "valid product key",
 			args: args{
-				encodedProductKey: "AAYAAAAAAAAAAAAAAAAAAExLCU/N0RxxvG7ZACnE9iyfm1zRK6acy5rtKA01mFtnuCkFSJQtmsmoAN7KVyfxVbUpwPvJNKc2tkQbezXSbITnPSKnp8i9uG+C8DB+9oISsuTL8L0v07TOOsAnrSq4fR4mAhwANTYsmoLYmpqhVDLH/VVisfqVFSZu72vTDf2rjYESalQNawzIH8qjEhS2dzDUTm4RWf122JiPTSccbg2V8b4XXLRSefvc4ctVmCVvmrWRX+Aosgn9z0VS5V1ABhitiDjBd4NK34wOoGtn0vTwdiAfjMH95U5Q+c4hCjWsUnTrlUrdH5OQgtCDGi7Nag==",
-				macAddress:        "3cecef123456",
+				encodedProductKey: validEncodedProductKey,
+				macAddress:        validEncodedProductKeyMACAddress,
 			},
 			want: &ProductKey{
 				FormatVersion:      0,
@@ -39,13 +41,13 @@ func TestDecodeProductKey(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := DecodeProductKey(tt.args.encodedProductKey, tt.args.macAddress)
+			got, err := ParseEncodedProductKey(tt.args.encodedProductKey, tt.args.macAddress)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("DecodeProductKey() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("ParseEncodedProductKey() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("DecodeProductKey() got = %v, want %v", got, tt.want)
+				t.Errorf("ParseEncodedProductKey() got = %v, want %v", got, tt.want)
 			}
 		})
 	}

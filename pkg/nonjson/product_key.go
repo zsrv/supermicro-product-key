@@ -5,25 +5,11 @@ import (
 	"bytes"
 	"encoding/base64"
 	"fmt"
-	"github.com/zsrv/supermicro-product-key/pkg/oob"
 	"strconv"
 	"time"
-)
 
-// NewProductKey returns a new ProductKey with default values set.
-func NewProductKey() *ProductKey {
-	return &ProductKey{
-		FormatVersion:      0,
-		SoftwareIdentifier: *SoftwareIdentifiers.Reserved,
-		SoftwareVersion:    "none",
-		InvoiceNumber:      "none",
-		CreationDate:       time.Now().UTC(),
-		ExpirationDate:     time.Unix(0, 0).UTC(),
-		Property:           nil,
-		SecretData:         nil,
-		Checksum:           0,
-	}
-}
+	netinternal "github.com/zsrv/supermicro-product-key/pkg/net"
+)
 
 type ProductKey struct {
 	// FormatVersion is the format version of the product key.
@@ -56,14 +42,24 @@ type ProductKey struct {
 	Checksum byte
 }
 
+// NewDefaultProductKey returns a new ProductKey with default values set.
+func NewDefaultProductKey() ProductKey {
+	return ProductKey{
+		FormatVersion:      0,
+		SoftwareIdentifier: *SoftwareIdentifiers.Reserved,
+		SoftwareVersion:    "none",
+		InvoiceNumber:      "none",
+		CreationDate:       time.Now().UTC(),
+		ExpirationDate:     time.Unix(0, 0).UTC(),
+		Property:           nil,
+		SecretData:         nil,
+		Checksum:           0,
+	}
+}
+
 // Encode returns the encrypted, base64-encoded ProductKey associated with
 // the given BMC MAC address.
-func (pk *ProductKey) Encode(macAddress string) (string, error) {
-	macAddress, err := oob.NormalizeMACAddress(macAddress)
-	if err != nil {
-		return "", err
-	}
-
+func (pk *ProductKey) Encode(macAddress netinternal.HardwareAddr) (string, error) {
 	buffer := bytes.NewBuffer(make([]byte, 0, 255))
 	writer := bufio.NewWriterSize(buffer, 255)
 
@@ -72,7 +68,7 @@ func (pk *ProductKey) Encode(macAddress string) (string, error) {
 
 	// Unencrypted block
 
-	err = writer.WriteByte(pk.FormatVersion)
+	err := writer.WriteByte(pk.FormatVersion)
 	if err != nil {
 		return "", err
 	}

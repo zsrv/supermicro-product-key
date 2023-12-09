@@ -2,11 +2,13 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+	"text/tabwriter"
+
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"github.com/zsrv/supermicro-product-key/pkg/json"
-	"os"
-	"text/tabwriter"
+	netinternal "github.com/zsrv/supermicro-product-key/pkg/net"
 )
 
 func init() {
@@ -23,13 +25,21 @@ var jsonCmd = &cobra.Command{
 
 var jsonVerifyCmd = &cobra.Command{
 	Use:   "verify MAC_ADDRESS PRODUCT_KEY",
-	Short: "Verify the signature of a JSON product key",
+	Short: "VerifyWithKey the signature of a JSON product key",
 	Args:  cobra.ExactArgs(2),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		macAddress := args[0]
+		macAddress, err := netinternal.ParseMAC(args[0])
+		if err != nil {
+			return err
+		}
 		productKey := args[1]
 
-		if err := json.VerifyProductKeySignature(productKey, macAddress); err != nil {
+		license, err := json.ParseLicense(productKey)
+		if err != nil {
+			return err
+		}
+
+		if err := license.Verify(macAddress); err != nil {
 			return errors.WithMessage(err, "product key verification failed")
 		}
 

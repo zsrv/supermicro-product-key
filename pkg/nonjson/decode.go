@@ -6,15 +6,15 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
-	"github.com/zsrv/supermicro-product-key/pkg/oob"
 	"io"
-	"strings"
+
+	netinternal "github.com/zsrv/supermicro-product-key/pkg/net"
 )
 
-// DecodeProductKey returns a ProductKey, decoded from a base64-encoded string.
+// ParseEncodedProductKey returns a ProductKey, decoded from a base64-encoded string.
 // The BMC MAC address associated with the product key is used in the decryption process.
 // An error is returned instead if one occurs.
-func DecodeProductKey(encodedProductKey string, macAddress string) (*ProductKey, error) {
+func ParseEncodedProductKey(encodedProductKey string, macAddress netinternal.HardwareAddr) (*ProductKey, error) {
 	decoded, err := base64.StdEncoding.DecodeString(encodedProductKey)
 	if err != nil {
 		return nil, err
@@ -35,13 +35,8 @@ func DecodeProductKey(encodedProductKey string, macAddress string) (*ProductKey,
 
 // decryptProductKey returns a decrypted product key, or an error if one occurs.
 // The BMC MAC address is used to derive the decryption key and iv.
-func decryptProductKey(encrypted []byte, macAddress string) ([]byte, error) {
-	macAddress, err := oob.NormalizeMACAddress(macAddress)
-	if err != nil {
-		return nil, err
-	}
-
-	keyingMaterial := strings.ToUpper(macAddress) + "ej" + "mb"
+func decryptProductKey(encrypted []byte, macAddress netinternal.HardwareAddr) ([]byte, error) {
+	keyingMaterial := macAddress.String() + "ej" + "mb"
 	key, iv := generateKeyAndIV(keyingMaterial)
 
 	plaintext, err := aesDecrypt(encrypted[16:], key, iv)

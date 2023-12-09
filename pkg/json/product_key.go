@@ -2,16 +2,16 @@ package json
 
 import (
 	"crypto"
-	"crypto/rsa"
 	"crypto/sha256"
-	"encoding/base64"
-	"github.com/zsrv/supermicro-product-key/pkg/oob"
-	"strings"
+	"encoding/json"
+
+	rsainternal "github.com/zsrv/supermicro-product-key/pkg/crypto/rsa"
+	netinternal "github.com/zsrv/supermicro-product-key/pkg/net"
 )
 
-// licenseSigningPublicKey is used to validate JSON format licenses
+// LicenseSigningPublicKey is used to verify JSON format licenses
 // that have been digitally signed by Supermicro.
-var licenseSigningPublicKey = []byte(`-----BEGIN RSA PUBLIC KEY-----
+var LicenseSigningPublicKey = []byte(`-----BEGIN RSA PUBLIC KEY-----
 MIIBCAKCAQEAvDb4MxWw/FTi8pscP6S2YAl/3gmVOj/StG0lu3PdCSmdpzmzbOU9
 KBS3t0yPZ0ynUQj/qXOwaVLvBJ+uCE0pGIRWkzBersVUzmXXN8Dza5yOzlLIdsVn
 amUrKcRHgC+otRE/gnCxIiioacy9TkA96otbAvztCl1j1W8oCixazpfwZrayy12y
@@ -26,7 +26,7 @@ type License struct {
 
 type ProductKey struct {
 	Node      Node
-	Signature string
+	Signature []byte
 }
 
 type Node struct {
@@ -35,33 +35,43 @@ type Node struct {
 	CreateDate  string
 }
 
-// VerifySignature returns nil if the license signature is valid when the given
-// macAddress is used as input in the message being hashed and signed, or an error
-// if one occurs.
-func (l *License) VerifySignature(macAddress string) error {
-	macAddress, err := oob.NormalizeMACAddress(macAddress)
+func ParseLicense(productKey string) (License, error) {
+	var license License
+	err := json.Unmarshal([]byte(productKey), &license)
+	if err != nil {
+		return License{}, err
+	}
+
+	return license, nil
+}
+
+// Verify verifies the License signature.
+//
+// An error is returned if the License data has been altered, the macAddress
+// is not the one that was in the License message that was signed, or
+// LicenseSigningPublicKey is not the one that was used to sign the License data.
+func (l *License) Verify(macAddress netinternal.HardwareAddr) error {
+	publicKey, err := parseRSAPublicKey(LicenseSigningPublicKey)
 	if err != nil {
 		return err
 	}
-	macAddress = strings.ToUpper(macAddress)
 
-	publicKey, err := parseRSAPublicKey(licenseSigningPublicKey)
-	if err != nil {
-		return err
-	}
+	return l.VerifyWithKey(publicKey, macAddress)
+}
 
-	signature, err := base64.StdEncoding.DecodeString(l.ProductKey.Signature)
-	if err != nil {
-		return err
-	}
-
-	message := []byte(macAddress +
+// VerifyWithKey verifies the License signature against publicKey.
+//
+// An error is returned if the License data has been altered, the macAddress
+// is not the one that was in the License message that was signed, or the
+// publicKey is not the one that was used to sign the License data.
+func (l *License) VerifyWithKey(publicKey *rsainternal.PublicKey, macAddress netinternal.HardwareAddr) error {
+	message := []byte(macAddress.String() +
 		l.ProductKey.Node.LicenseID +
 		l.ProductKey.Node.LicenseName +
 		l.ProductKey.Node.CreateDate)
 	hashed := sha256.Sum256(message)
 
-	err = rsa.VerifyPKCS1v15(publicKey, crypto.SHA256, hashed[:], signature)
+	err := rsainternal.VerifyPKCS1v15(publicKey, crypto.SHA256, hashed[:], l.ProductKey.Signature)
 	if err != nil {
 		return err
 	}

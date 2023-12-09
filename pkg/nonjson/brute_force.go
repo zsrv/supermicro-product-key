@@ -1,42 +1,47 @@
 package nonjson
 
 import (
-	"encoding/hex"
 	"errors"
+
 	"github.com/rs/zerolog/log"
+	netinternal "github.com/zsrv/supermicro-product-key/pkg/net"
 	"github.com/zsrv/supermicro-product-key/pkg/oob"
 )
 
-// BruteForceProductKeyMACAddress finds the MAC address associated with an encrypted
+// BruteForceMACAddress finds the MAC address associated with an encrypted
 // product key. The MAC address can then be used to decrypt the key.
-func BruteForceProductKeyMACAddress(encodedProductKey string) (string, error) {
-	brute := func(macBlock string, result chan string, done chan bool) {
-		log.Debug().Msgf("searching mac address block '%s'", macBlock)
+func BruteForceMACAddress(encodedProductKey string) (string, error) {
+	brute := func(macBlock [3]byte, result chan netinternal.HardwareAddr, done chan bool) {
+		log.Debug().Msgf("searching mac address block %X", macBlock)
 
+		mac := make(netinternal.HardwareAddr, 6)
 		for one := 0; one <= 255; one++ {
-			hexOne := hex.EncodeToString([]byte{byte(one)})
 			for two := 0; two <= 255; two++ {
-				hexTwo := hex.EncodeToString([]byte{byte(two)})
 				for three := 0; three <= 255; three++ {
-					hexThree := hex.EncodeToString([]byte{byte(three)})
+					mac[0] = macBlock[0]
+					mac[1] = macBlock[1]
+					mac[2] = macBlock[2]
+					mac[3] = byte(one)
+					mac[4] = byte(two)
+					mac[5] = byte(three)
 
-					mac := macBlock + hexOne + hexTwo + hexThree
-
-					if _, err := DecodeProductKey(encodedProductKey, mac); err != nil {
+					if _, err := ParseEncodedProductKey(encodedProductKey, mac); err != nil {
 						continue
 					}
 
-					result <- mac
+					m := make(netinternal.HardwareAddr, len(mac))
+					copy(m, mac)
+					result <- m
 					done <- true
 				}
 			}
 		}
 
-		log.Debug().Msgf("finished searching mac address block '%s' with no matches", macBlock)
+		log.Debug().Msgf("finished searching mac address block %X with no matches", macBlock)
 		done <- true
 	}
 
-	result := make(chan string)
+	result := make(chan netinternal.HardwareAddr)
 	done := make(chan bool)
 
 	for _, macBlock := range oob.SupermicroMACAddressBlocks {
@@ -46,7 +51,7 @@ func BruteForceProductKeyMACAddress(encodedProductKey string) (string, error) {
 	for range oob.SupermicroMACAddressBlocks {
 		select {
 		case resultMAC := <-result:
-			return resultMAC, nil
+			return resultMAC.String(), nil
 		case <-done:
 			continue
 		}

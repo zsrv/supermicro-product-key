@@ -7,19 +7,14 @@ import (
 	"crypto/md5"
 	"errors"
 	"fmt"
-	"github.com/zsrv/supermicro-product-key/pkg/oob"
-	"strings"
+
+	netinternal "github.com/zsrv/supermicro-product-key/pkg/net"
 )
 
 // encryptProductKey returns an encrypted product key, or an error if one occurs.
 // The BMC MAC address is used to derive the encryption key and iv.
-func encryptProductKey(decrypted []byte, macAddress string) ([]byte, error) {
-	macAddress, err := oob.NormalizeMACAddress(macAddress)
-	if err != nil {
-		return nil, err
-	}
-
-	keyingMaterial := strings.ToUpper(macAddress) + "ej" + "mb"
+func encryptProductKey(decrypted []byte, macAddress netinternal.HardwareAddr) ([]byte, error) {
+	keyingMaterial := macAddress.String() + "ej" + "mb"
 	key, iv := generateKeyAndIV(keyingMaterial)
 
 	ciphertext, err := aesEncrypt(decrypted[16:], key, iv)
@@ -34,18 +29,11 @@ func encryptProductKey(decrypted []byte, macAddress string) ([]byte, error) {
 // getEncryptedSecretData returns the secret data value associated with the given
 // BMC MAC address and additional keying material derived from other content in
 // the product key.
-func getEncryptedSecretData(macAddress string, keyingMaterialInput string) ([]byte, error) {
-	macAddress, err := oob.NormalizeMACAddress(macAddress)
-	if err != nil {
-		return nil, err
-	}
-
-	macAddress = strings.ToUpper(macAddress)
-
-	keyingMaterial := macAddress + "am" + "ac" + keyingMaterialInput
+func getEncryptedSecretData(macAddress netinternal.HardwareAddr, keyingMaterialInput string) ([]byte, error) {
+	keyingMaterial := macAddress.String() + "am" + "ac" + keyingMaterialInput
 	key, iv := generateKeyAndIV(keyingMaterial)
 
-	encryptedMAC, err := aesEncrypt([]byte(macAddress), key, iv)
+	encryptedMAC, err := aesEncrypt([]byte(macAddress.String()), key, iv)
 	if err != nil {
 		return nil, err
 	}
