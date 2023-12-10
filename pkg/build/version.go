@@ -5,7 +5,7 @@ import (
 	"runtime"
 )
 
-var buildVersion = "1.1.0"
+var buildVersion = "1.2.0"
 var buildCommit string
 var buildDate = "unknown"
 var builtBy string
