@@ -9,19 +9,19 @@
 // func addMulVVW1024(z, x *uint, y uint) (c uint)
 TEXT ·addMulVVW1024(SB), $0-16
 	MOVL	$32, BX
-	JMP		addMulVVWx(SB)
+	JMP		addMulVVWx2(SB)
 
 // func addMulVVW1536(z, x *uint, y uint) (c uint)
 TEXT ·addMulVVW1536(SB), $0-16
 	MOVL	$48, BX
-	JMP		addMulVVWx(SB)
+	JMP		addMulVVWx2(SB)
 
 // func addMulVVW2048(z, x *uint, y uint) (c uint)
 TEXT ·addMulVVW2048(SB), $0-16
 	MOVL	$64, BX
-	JMP		addMulVVWx(SB)
+	JMP		addMulVVWx2(SB)
 
-TEXT addMulVVWx(SB), NOFRAME|NOSPLIT, $0
+TEXT addMulVVWx2(SB), NOFRAME|NOSPLIT, $0
 	MOVL z+0(FP), DI
 	MOVL x+4(FP), SI
 	MOVL y+8(FP), BP
