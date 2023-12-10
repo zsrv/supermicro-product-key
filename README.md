@@ -399,6 +399,44 @@ Select 12th generation platform motherboards accept non-JSON keys instead of JSO
 - H12SSW-NT
 - H12SSW-NTL
 
+## Troubleshooting
+
+### How to remove a non-JSON format key
+
+If you need to remove a non-JSON format key that has been activated on a system, you can use the Supermicro SUM
+utility to do this, up to and including version 2.4.0 (dated 2019-12-06). SUM versions after 2.4.0 no longer have
+the ability to remove keys.
+
+You may need to do this if you activate a key with a value set for the "property" parameter
+(see [issue #2](https://github.com/zsrv/supermicro-product-key/issues/2));
+the BMC will accept the key, but it has been reported that BMC functions that require the key you activated will
+still report that the system is not licensed.
+
+SUM 2.4.0 is no longer available on Supermicro's website, but it can be found hosted on other websites.
+
+SHA256 checksum for verification ([source](https://aur.archlinux.org/cgit/aur.git/commit/?h=supermicro-update-manager&id=a1a30db1c126a476c0d92339256259ef94adac67)):
+
+```
+sum_2.4.0_Linux_x86_64_20191206.tar.gz d0d7203913334e02d4ea1c8493834c5a0e7236040380447e22697b816dc614c7
+```
+
+Example of how to remove a key:
+
+```
+> ./sum -i 1.2.3.4 -u user -p password -c QueryProductKey
+Supermicro Update Manager (for UEFI BIOS) 2.4.0 (2019/12/06) (x86_64)
+Copyright(C) 2013-2019 Super Micro Computer, Inc. All rights reserved.
+
+[1] SFT-DCMS-Single, version: ABC123, invoice: 0123456789, creation date: 2020/12/30 12:00:00(Key is good.)
+Number of product keys: 1
+
+> ./sum -i 1.2.3.4 -u user -p password -c ClearProductKey --key_index 1
+Supermicro Update Manager (for UEFI BIOS) 2.4.0 (2019/12/06) (x86_64)
+Copyright(C) 2013-2019 Super Micro Computer, Inc. All rights reserved.
+
+Node product key is deactivated for 1.2.3.4.
+```
+
 ## Glossary
 
 **Node Product Key**: A product key that is activated on a specific system. The key is bound to the MAC address of
